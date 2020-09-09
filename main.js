@@ -8,7 +8,8 @@ app.set("view engine", "ejs");
 app.engine("html", ejs.renderFile);
 
 
-
+const { appMain } = require("./src/controller/routingExpress")
+app.use(appMain);
 
 
 
