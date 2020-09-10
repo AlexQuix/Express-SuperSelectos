@@ -17,9 +17,10 @@ app.use(express.json());
 
 
 // ROUTES THE APPLICATION
-const { appMain, loginPost } = require("./src/controller/routing");
+const { appMain, loginPost, appProduct } = require("./src/controller/routing");
 app.use(appMain);
 app.use(loginPost);
+app.use(appProduct)
 
 
 // PUERTO
