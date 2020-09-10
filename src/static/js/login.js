@@ -22,7 +22,6 @@ function sendFormSingUp(){
     let btn = document.querySelector("#container-login > #cont-signup > div > form > #btns button");
     btn.onclick = async function(e){
         e.preventDefault();
-        debugger;
         if(e.target.validity.valid){
             let formdata = new FormData(form);
             let response = await fetch("http://localhost:3000/login/signup/create-user", {    
@@ -83,16 +82,13 @@ function sendFormSingIn(){
 function cheekUserSignUp(){
     let input_user = document.querySelector("#cont-signup > div > form > #inputs #input-user");
     input_user.oninput = async function(element){
-        let formdata = new FormData();
-        formdata.append("user", element.target.value);
-        let xhr = new XMLHttpRequest();
-        xhr.onload = (e)=>{
-            let mensaje = e.target.response;
-            contAlert(e.target.response === "OK", input_user, "signup", mensaje)
-        }
-        xhr.open("POST", "http://localhost:3000/login/signup/cheek-user");
-        xhr.responseType = "text";
-        xhr.send(formdata);
+        let response = await fetch("/login/signup/cheek-user", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: `{"user": "${element.target.value}"}`
+        });
+        let text = await response.text();
+        contAlert((text === "ok"), input_user, "signup", text);
     }
 };
 function cheekPasswordSignUp(){
