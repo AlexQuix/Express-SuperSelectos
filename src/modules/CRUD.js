@@ -1,64 +1,53 @@
 const {MongoClient} = require("mongodb");
 
 
-
+let db;
+!async function(){
     // CONNECTING MONGODB
-    let db;
-    async function runMongo(){
-        let uri = "mongodb://localhost:27017";
-        let client = new MongoClient(uri, {useUnifiedTopology: true});
-        await client.connect();
-        db = client.db("superselectos");
-    }
-    runMongo();
-    
+    let uri = "mongodb://localhost:27017";
+    let client = new MongoClient(uri, {useUnifiedTopology: true});
+    await client.connect();
+    db = client.db("superselectos");
+}();
 
-    // OPERATIONS CRUD
-    async function createData(dbname, data, many = false){
-        let collection = db.collection(dbname);
-        let cursor;
+// OPERATIONS CRUD
+class CRUD{
+    static create(collname, data, many = false){
+        let collection = db.collection(collname);
         if(!many){
-            cursor = await collection.insertOne(data);
+            return collection.insertOne(data);
         }else{
-            cursor = await collection.insertMany(data);
+            return collection.insertMany(data);
         }
-        return cursor;
     }
-    async function readData(dbname, data, many = false){
-        let collection = db.collection(dbname);
-        let cursor;
+    static read(collname, data, many = false){
+        let collection = db.collection(collname);
         if(!many){
-            cursor = await collection.findOne(data);
+            return collection.findOne(data);
         }else{
-            cursor = await collection.find(data);
+            return collection.find(data);
         }
-        return cursor;
     }
-    async function updateData(dbname, data, many = false){
-        let collection = db.collection(dbname);
-        let cursor;
+    static delete(collname, data, many = false){
+        let collection = db.collection(collname);
         if(!many){
-            cursor = await collection.updateOne(data);
+            return collection.deleteOne(data);
         }else{
-            cursor = await collection.updateMany(data);
+            return collection.deleteMany(data);
         }
-        return cursor;
     }
-    async function deleteData(dbname, data, many = false){
-        let collection = db.collection(dbname);
-        let cursor;
+    static update(collname, data, many = false){
+        let collection = db.collection(collname);
         if(!many){
-            cursor = await collection.deleteOne(data);
+            return collection.updateOne(data);
         }else{
-            cursor = await collection.deleteMany(data);
+            return collection.updateMany(data);
         }
-        return cursor;
-    }   
-
-
+    } 
+    static collection(name){
+        return db.collection(name);
+    }
+}
 
 // EXPORTS OPERATIONS CRUD
-exports.createData = createData;
-exports.readData = readData;
-exports.updateData = updateData;
-exports.deleteData = deleteData;
+module.exports = CRUD;
