@@ -143,11 +143,11 @@ function efectDeleteHeader(){
 
 async function requestFetch(obj, index){
     if(obj){
-        let response = await fetch("/product/serch-product", {
+        let response = await fetch("/products/search-product/", {
             method: "POST",
-            body: `id=${obj.id}&clasification=${obj.clasificacion}`});
-        let text = await response.text();
-        let json = JSON.parse(text)
+            headers: {"Content-Type": "application/json"},
+            body: `{"id":"${obj.id}"}`});
+        let json = await response.json();
         json["index"] = index;
         Carrito.addContentCarrito(json);
     }

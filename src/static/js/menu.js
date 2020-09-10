@@ -31,7 +31,7 @@ function visibleOptMenuBtn(){
 function addContKeyWord(json){
     let contKeyWord = document.querySelector("#cont-menu > #buscar > #search-result");
     contKeyWord.innerHTML += `
-        <a href="/product/clasification/serch?id=${json["id"]}">${json["key word"]}</a>
+        <a href="/product/clasification/search?id=${json["_id"]}">${json["name"]}</a>
     `;
 }
 
@@ -45,13 +45,13 @@ function serchKeyWord(){
         /* BUSCAR KEYWORD */
         let serchWord = e.target.value;
         if(serchWord !== ""){
-            let response = await fetch("/post/product/serch-keyword",{
+            let response = await fetch("/products/search-keyword/",{
                 method: "POST",
-                body: `word=${serchWord}`
+                headers: {"Content-Type": "application/json"},
+                body: `{"word":"${serchWord}"}`
             });
-            let text = await response.text();
-            let json = JSON.parse(text);
-            btnSerch.href = `/product/clasification/serch?id=${json[0].id}`;
+            let json = await response.json();
+            btnSerch.href = `/product/clasification/search?id=${json[0]["_ids"]}`;
             for(let element of json){
                 addContKeyWord(element);
             }
