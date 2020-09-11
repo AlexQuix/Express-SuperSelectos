@@ -33,7 +33,6 @@ body{
 #container-login > #cont-signin > div,
 #container-login > #cont-signup > div{
     width: 500px;
-    margin: 40px 0px;
     background: rgb(248, 248, 248);
     border-radius: 10px;
     overflow: hidden;
