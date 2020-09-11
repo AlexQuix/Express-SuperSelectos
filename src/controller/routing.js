@@ -95,15 +95,6 @@ appProduct.post("/products/search-:operation/(:clasification)?", async function(
 });
 
 
-!async function(){
-    // setTimeout(async function(){
-    //     let cursor = await CRUD.read("products", {_id: Mongo.ObjectId("5f59a28ad786bc20880879ea")})
-    //     console.log(cursor);
-    // }, 3000)
-
-}();
-
-
 
 exports.appMain = appMain;
 exports.loginPost = appLoginPost;
