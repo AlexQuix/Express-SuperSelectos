@@ -14,6 +14,14 @@ class Product{
             let product = Product.createContentProduct(this.json);
             containerProduct.innerHTML += product;
         }
+
+        let list_product = document.querySelector("#container-product > #list-product");
+        switch(list_product.dataset.showas){
+            case "column": showAsProductColumn();
+            break;
+            case "mosaic": showAsProductMosaic();
+            break;
+        }
         btnAddCarrito();
     }
     
@@ -49,7 +57,7 @@ class Product{
 }
 
 let index = 0;
-function initProduct(){
+function startProduct(){
     let listProduct = document.querySelector("#container-product > #list-product");
     let clasification = listProduct.dataset.clasification;
 
@@ -65,6 +73,7 @@ function initProduct(){
             callProduct();
         }
     }
+    showAsProduct();
 }
 function callProduct(){
     Product.requestProduct("general/", true);
@@ -90,4 +99,226 @@ function btnAddCarrito(){
 
 
 
-window.onload = initProduct;
+// CONTAINER SHOW AS PRODUCT
+function showAsProduct(){
+    // CONTAINERS PRODUCT
+    let list_product = document.querySelector("#container-product > #list-product");
+
+    // BUTTON SHOW AS PRODUCT
+    // MOSAIC
+    let btn_mosaic = document.querySelector("#container-product > #container-opt-show-product > form > #show-as-product > #mosaico");
+    let svgMosaic = btn_mosaic.childNodes[1];
+    svgMosaic.style.fill = "#759126";
+    btn_mosaic.onclick = showAsProductMosaic
+    // COLUMN
+    let btn_column = document.querySelector("#container-product > #container-opt-show-product > form > #show-as-product > #column");
+    btn_column.onclick = showAsProductColumn;
+
+
+
+    // BUTTON SEARCH
+    let btnSearch = document.querySelector("#container-product > #container-opt-show-product > form > #btn-search > button");
+    btnSearch.onclick = async function(e){
+        e.preventDefault();
+        list_product.innerHTML = "";
+
+        let input = document.querySelector("#container-product > #container-opt-show-product > form > #clasification-product > select");
+        if(!(input.value === "general")){
+            await Product.requestProduct(("clasification/" + input.value), true);
+        }else{
+            await Product.requestProduct("general/", true);
+        }
+        switch(list_product.dataset.showas){
+            case "column": showAsProductColumn();
+            break;
+            case "mosaic": showAsProductMosaic;
+            break;
+        }
+    }
+}
+let arrayProductAnimations = [];
+// MOVE SCROLL
+class MoveScroll{
+    constructor(element, limit){
+        this.element = element;
+        this.limit = limit;
+        this.index = 0;
+        this.revert = true;
+        this.stop = false;
+    }
+    startScroll(){
+        if(!this.stop){
+            if(this.revert){
+                this.index = 0;
+                this.element.style.left = `${this.index}px`;
+                this.revert = false;
+            }else{
+                this.index = this.limit - this.element.offsetWidth;
+                this.element.style.left = `${this.index}px`;
+                this.revert = true;
+            }
+            setTimeout(()=>{
+                this.startScroll();
+            }, 3000);
+        }else{
+            this.element.style.left = `${0}px`;
+        }
+    }
+}
+function showAsProductMosaic(){
+    let btn_column = document.querySelector("#container-product > #container-opt-show-product > form > #show-as-product > #column");
+    let btn_mosaic = document.querySelector("#container-product > #container-opt-show-product > form > #show-as-product > #mosaico");
+    // ANIMATIONS PRODUCT BUTTON SHOWS AS
+    let svgColumn = btn_column.childNodes[1];
+    svgColumn.style.fill = "#000";
+    let svgMosaic = btn_mosaic.childNodes[1];
+    svgMosaic.style.fill = "#759126";
+
+    // CONTAINER LIST STYLE
+    let list_product = document.querySelector("#container-product > #list-product");
+    list_product.style.display = "flex";
+    list_product.style.flexWrap = "wrap";
+    list_product.dataset.showas = "mosaic";
+
+    let array_product = document.querySelectorAll("#container-product > #list-product .product");
+    for(let product of array_product){
+        // STYLES PRODUCT
+        product.style.width = "270px";
+        product.style.height = "200px";
+        product.style.margin = "10px";
+        product.style.display = "flex";
+        product.style.flexDirection = "row";
+
+        // STYLES PRODUCT ARTICLES
+        let article = product.childNodes[1];
+        article.style.width = "100%"
+        article.style.height = "100%";
+        article.style.flexDirection = "column";
+        article.style.boxSizing = "border-box";
+
+            // STYLES PRODUCT ARTICLES IMG
+            let article_img = article.childNodes[1].style;
+            article_img.width = "100%";
+            article_img.marginRight = "100%";
+            article_img.borderRadius = "0px";
+            article_img.position = "absolute";
+            article_img.display = "grid";
+            article_img.placeItems = "center";
+
+            // STYLES PRODUCT ARTICLES TEXTO
+            let article_text = article.childNodes[3].style;
+            article_text.width = "100%";
+            article_text.height = "150px";
+            article_text.padding = "0px 0.5em 0.5em";
+            article_text.background = "rgb(255, 255, 255)";
+            article_text.borderRadius = "5px 5px 0px 0px";
+            article_text.position = "absolute";
+            article_text.bottom = "-110px";
+            article_text.left = "0px";
+            article_text.zIndex = "100";
+            article_text.boxSizing = "border-box";
+
+        // STYLES PRODUCT BUTTON
+        let divBtn = product.childNodes[3].style;
+        divBtn.width = "100%";
+        divBtn.padding = "10px";
+        divBtn.borderLeft = "none";
+        divBtn.position = "absolute";
+        divBtn.bottom = "-50px";
+        divBtn.left = "0px";
+        divBtn.flexDirection = "row";
+
+        // STYLES PRODUCT ARTICLES H1
+        let h1 = article.childNodes[3].childNodes[1].childNodes[0];
+        
+        if(h1.scrollWidth > h1.offsetWidth){
+            h1.style.position = "relative";
+            h1.style.width = `${h1.scrollWidth}px`;
+            h1.style.transition = "1s";
+            let animation = new MoveScroll(h1, 250);
+            animation.startScroll();
+            arrayProductAnimations.push(animation);
+        }
+        
+
+        // STYLES PRODUCT ANIMATIONS
+        product.onmousemove = ()=>{
+            divBtn.bottom = "0px";
+            article_text.bottom = "50px";
+        }
+        product.onmouseleave = ()=>{
+            divBtn.bottom = "-50px";
+            article_text.bottom = "-110px";
+        }
+    }
+}
+function showAsProductColumn(){
+    let btn_column = document.querySelector("#container-product > #container-opt-show-product > form > #show-as-product > #column");
+    let btn_mosaic = document.querySelector("#container-product > #container-opt-show-product > form > #show-as-product > #mosaico");
+    let svgColumn = btn_column.childNodes[1];
+    svgColumn.style.fill = "#759126";
+    let svgMosaic = btn_mosaic.childNodes[1];
+    svgMosaic.style.fill = "#000";
+
+    let list_product = document.querySelector("#container-product > #list-product");
+    list_product.style.display = "block";
+    list_product.style.flexWrap = "none";
+    list_product.dataset.showas = "column";
+
+    let array_product = document.querySelectorAll("#container-product > #list-product .product");
+    for(let product of array_product){
+
+        product.style.width = "100%";
+        product.style.height = "170px";
+        product.style.marginBottom = "10px";
+        product.style.display = "flex";
+        product.style.flexDirection = "row";
+
+        let article = product.childNodes[1];
+        article.style.width = "90%"
+        article.style.height = "100%";
+        article.style.padding = "0.8em 3em"
+        article.style.flexDirection = "row";
+
+            let article_img = article.childNodes[1].style;
+            article_img.width = "200px";
+            article_img.marginRight = "20px";
+            article_img.borderRadius = "5px";
+            article_img.position = "relative";
+            article_img.display = "grid";
+            article_img.placeItems = "center";
+
+            let article_text = article.childNodes[3].style;
+            article_text.width = "80%";
+            article_text.height = "auto";
+            article_text.padding = "0px 1em";
+            article_text.background = "rgb(255, 255, 255)";
+            article_text.borderRadius = "5px 5px 0px 0px";
+            article_text.position = "relative";
+            article_text.bottom = "0px";
+            article_text.left = "auto";
+            article_text.zIndex = "auto";
+            article_text.boxSizing = "border-box";
+
+        let divBtn = product.childNodes[3].style;
+        divBtn.width = "10%";
+        divBtn.padding = "0px";
+        divBtn.borderLeft = "5px solid var(--color2)";
+        divBtn.position = "relative";
+        divBtn.bottom = "0px";
+        divBtn.right = "0px";
+        divBtn.flexDirection = "column";
+
+        product.onmousemove = undefined;
+        product.onmouseleave = undefined;
+    }
+    // STOP ANIMATION PRODUCTS
+    while(arrayProductAnimations[0]){
+        let animation = arrayProductAnimations.pop();
+        animation.stop = true;
+    }
+}
+
+
+
+window.onload = startProduct;

@@ -76,7 +76,9 @@ appProduct.post("/products/search-:operation/(:clasification)?", async function(
             send = cursor;
         break;
         case "clasification":
-            var cursor = await CRUD.read("products", {classification: req.params.clasification}, true)
+            var cursor = await CRUD.read("products", {classification: {
+                $regex: req.params.clasification
+            }}, true)
             send = await cursor.toArray();
         break;
         case "keyword":
