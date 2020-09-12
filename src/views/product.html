@@ -15,7 +15,33 @@
     <%- include("parts/menu") %>
     <section id="container-product">
         <header><h1>Productos</h1></header>
-        <section id="list-product" data-clasification="<%= clasification %>">
+        <section id="container-opt-show-product">
+            <form>
+                <label for="clasification" id="clasification-product">
+                    Clasificacion de productos: 
+                    <select name="clasification" id="">
+                        <option value="general">General</option>
+                        <option value="alimentos">Alimentos</option>
+                        <option value="carne">Carne</option>
+                        <option value="juguetes">Juguetes</option>
+                        <option value="aseo">Aseo Personal</option>
+                        <option value="electronica">Electronica</option>
+                    </select>
+                </label>
+                <label id="show-as-product">Mostrar como: 
+                    <span id="column">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" class="svg-inline--fa fa-bars fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path></svg>
+                    </span>
+                    <span id="mosaico">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="border-all" class="svg-inline--fa fa-border-all fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H32A32 32 0 0 0 0 64v384a32 32 0 0 0 32 32h384a32 32 0 0 0 32-32V64a32 32 0 0 0-32-32zm-32 64v128H256V96zm-192 0v128H64V96zM64 416V288h128v128zm192 0V288h128v128z"></path></svg>
+                    </span>
+                </label>
+                <label id="btn-search">
+                    <button>Buscar</button>
+                </label>
+            </form>
+        </section>
+        <section id="list-product" data-clasification="<%= clasification %>" data-showas = "mosaic">
             
         </section>
     </section>
