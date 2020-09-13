@@ -177,6 +177,7 @@
 }
 #carrito-container-product > div > #cont-producto .product > #inf-product > #cont-text > header > h1,
 #container-product > #list-product .product > article > #cont-text > header > h1{
+    width: 100%;
     height: 30px;
     padding-top: 0.5em;
     font-size: 0.8em;
@@ -186,7 +187,7 @@
     white-space: nowrap;
     color: var(--color2);
     overflow: hidden;
-    transition: 1s;
+    transition: 0.5s;
 }
 #carrito-container-product > div > #cont-producto .product > #inf-product > #cont-text > p,
 #container-product > #list-product .product > article > #cont-text > p{
@@ -283,11 +284,3 @@
     color: var(--color2);
 }
 
-
-
-
-@keyframes moveTop{
-    100%{
-        bottom: 0px;
-    }
-}

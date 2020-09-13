@@ -1,3 +1,34 @@
+let arrayProductAnimations = [];
+// MOVE SCROLL
+class MoveScroll{
+    constructor(element, limit){
+        this.element = element;
+        this.limit = limit;
+        this.index = 0;
+        this.revert = true;
+        this.stop = false;
+    }
+    startScroll(){
+        if(!this.stop){
+            if(this.revert){
+                this.index = 0;
+                this.element.style.left = `${this.index}px`;
+                this.revert = false;
+            }else{
+                this.index = this.limit - this.element.offsetWidth;
+                this.element.style.left = `${this.index}px`;
+                this.revert = true;
+            }
+            setTimeout(()=>{
+                this.startScroll();
+            }, 3000);
+        }else{
+            this.element.style.left = `${0}px`;
+        }
+    }
+}
+
+
 class Product{
 
     static async requestProduct(uri, iteration){
@@ -17,9 +48,9 @@ class Product{
 
         let list_product = document.querySelector("#container-product > #list-product");
         switch(list_product.dataset.showas){
-            case "column": showAsProductColumn();
+            case "column": showAsProductColumn();       
             break;
-            case "mosaic": showAsProductMosaic();
+            case "mosaic": showAsProductMosaic();       
             break;
         }
         btnAddCarrito();
@@ -89,10 +120,10 @@ function callProduct(){
 function btnAddCarrito(){
     let btnProduct = document.querySelectorAll("#container-product > #list-product .product > .btns");
     btnProduct.forEach(btn=>{
-        btn.onclick = (e)=>{
+        btn.onclick = async function(e){
             let product = btn.parentNode; 
             Carrito.addIdCarritoDB(product);
-            addMessageMenu();
+            await addMessageMenu();
         }
     });
 }
@@ -131,37 +162,8 @@ function showAsProduct(){
         switch(list_product.dataset.showas){
             case "column": showAsProductColumn();
             break;
-            case "mosaic": showAsProductMosaic;
+            case "mosaic": showAsProductMosaic();
             break;
-        }
-    }
-}
-let arrayProductAnimations = [];
-// MOVE SCROLL
-class MoveScroll{
-    constructor(element, limit){
-        this.element = element;
-        this.limit = limit;
-        this.index = 0;
-        this.revert = true;
-        this.stop = false;
-    }
-    startScroll(){
-        if(!this.stop){
-            if(this.revert){
-                this.index = 0;
-                this.element.style.left = `${this.index}px`;
-                this.revert = false;
-            }else{
-                this.index = this.limit - this.element.offsetWidth;
-                this.element.style.left = `${this.index}px`;
-                this.revert = true;
-            }
-            setTimeout(()=>{
-                this.startScroll();
-            }, 3000);
-        }else{
-            this.element.style.left = `${0}px`;
         }
     }
 }
@@ -227,18 +229,6 @@ function showAsProductMosaic(){
         divBtn.bottom = "-50px";
         divBtn.left = "0px";
         divBtn.flexDirection = "row";
-
-        // STYLES PRODUCT ARTICLES H1
-        let h1 = article.childNodes[3].childNodes[1].childNodes[0];
-        
-        if(h1.scrollWidth > h1.offsetWidth){
-            h1.style.position = "relative";
-            h1.style.width = `${h1.scrollWidth}px`;
-            h1.style.transition = "1s";
-            let animation = new MoveScroll(h1, 250);
-            animation.startScroll();
-            arrayProductAnimations.push(animation);
-        }
         
 
         // STYLES PRODUCT ANIMATIONS
@@ -251,6 +241,7 @@ function showAsProductMosaic(){
             article_text.bottom = "-110px";
         }
     }
+    showAsProductStartAnimation();
 }
 function showAsProductColumn(){
     let btn_column = document.querySelector("#container-product > #container-opt-show-product > form > #show-as-product > #column");
@@ -312,13 +303,36 @@ function showAsProductColumn(){
         product.onmousemove = undefined;
         product.onmouseleave = undefined;
     }
-    // STOP ANIMATION PRODUCTS
+    showAsProductStopAnimation();
+}
+// START ANIMATION PRODUCTS H1
+function showAsProductStartAnimation(){
+    showAsProductStopAnimation();
+    setTimeout(()=>{
+        let arrayH1 = document.querySelectorAll(" #container-product > #list-product .product > article > #cont-text > header > h1");
+        for(let elemH1 of arrayH1){
+            if(elemH1.scrollWidth > 250 || elemH1.style.width > 250 ){
+                // STYLES PRODUCT ARTICLES H1
+                elemH1.style.position = "relative";
+                elemH1.style.width = `${elemH1.scrollWidth}px`;
+                elemH1.style.transition = "1s";
+    
+                let animation = new MoveScroll(elemH1, 250);
+                animation.startScroll();
+                arrayProductAnimations.push(animation);
+            }
+        }
+    }, 1000);
+}
+// STOP ANIMATION PRODUCTS H1
+function showAsProductStopAnimation(){
     while(arrayProductAnimations[0]){
         let animation = arrayProductAnimations.pop();
         animation.stop = true;
+        animation.element.style.width = "100%";
+        animation.element.style.left = "0px";
     }
 }
-
 
 
 window.onload = startProduct;
