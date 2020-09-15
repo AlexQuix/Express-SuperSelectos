@@ -51,7 +51,7 @@ function serchKeyWord(){
                 body: `{"word":"${serchWord}"}`
             });
             let json = await response.json();
-            btnSerch.href = `/product/clasification/search?id=${json[0]["_ids"]}`;
+            btnSerch.href = `/product/clasification/search?id=${json[0]["_id"]}`;
             for(let element of json){
                 addContKeyWord(element);
             }
@@ -86,14 +86,25 @@ function informationAcoout(){
     }
 }
 
+let totalMsgAddProduct = 0;
 function addMessageMenu(name){
+    let contIndex = document.querySelector("#cont-menu > #container-message > #contador-index");
+    if(indexMsg > 0){
+        contIndex.innerHTML = `${totalMsgAddProduct}`;
+    }else{
+        contIndex.innerHTML = "";
+    }
+
     let contMessage = document.querySelector("#cont-menu > #container-message");
-    return new Promise((res, rej)=>{
-        contMessage.innerHTML = `Has agregado un producto a tu carrito`;
-        setTimeout(()=>{
-            contMessage.innerHTML = "";
-            res();
-        }, 2000);
-    })
+    contMessage.innerHTML += `<span id="m${indexMsg++}">Has agregado un producto a tu carrito</span>`;
+    totalMsgAddProduct += 1;
+    setTimeout(()=>{
+        let span = document.querySelector(`#cont-menu > #container-message > #m${--indexMsg}`);
+        span.remove();
+        if(indexMsg == 0){
+            totalMsgAddProduct = 0;
+            contIndex.innerHTML = "";
+        }
+    }, 2000);
 }
 window.onload = initMenu();

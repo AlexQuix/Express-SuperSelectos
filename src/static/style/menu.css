@@ -313,14 +313,27 @@
 /* MESSAGE THE AGREGATION PRODUCT */
 #cont-menu > #container-message{
     width: 100%;
-    padding: 0px 2em;
-    position: absolute;
-    top: 65px;
-    left: 0px;
+    max-height: 35px;
+    padding: 0px 3.5em;
     font-family: "Sriracha";
     color: #fff;
     background: var(--boton-color-hover-1);
+    position: absolute;
+    top: 65px;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     box-sizing: border-box;
     transition: 0.5s;
+}
+#cont-menu > #container-message > #contador-index{
+    padding: 0px 15px;
+    font-size: 20px;
+    font-family: "Sriracha";
+    color: #759126;
+    background: rgb(216, 216, 216);
+    position: absolute;
+    top: 0px;
+    left: 10px;
 }

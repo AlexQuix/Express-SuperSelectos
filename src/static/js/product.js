@@ -123,7 +123,7 @@ function btnAddCarrito(){
         btn.onclick = async function(e){
             let product = btn.parentNode; 
             Carrito.addIdCarritoDB(product);
-            await addMessageMenu();
+            addMessageMenu();
         }
     });
 }
