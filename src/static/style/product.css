@@ -283,11 +283,3 @@
     color: var(--color2);
 }
 
-
-
-
-@keyframes moveTop{
-    100%{
-        bottom: 0px;
-    }
-}

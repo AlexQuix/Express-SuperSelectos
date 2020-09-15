@@ -310,12 +310,12 @@
 
 
 
-
+/* MESSAGE THE AGREGATION PRODUCT */
 #cont-menu > #container-message{
     width: 100%;
     padding: 0px 2em;
     position: absolute;
-    top: 4em;
+    top: 65px;
     left: 0px;
     font-family: "Sriracha";
     color: #fff;

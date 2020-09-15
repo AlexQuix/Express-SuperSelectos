@@ -1,6 +1,7 @@
-
+let indexMsg = 0;
 class Carrito{
 
+    // ADD ID AND SEARCH PRODUCT
     static async serchProduct(){
         let json = JSON.parse(localStorage.getItem("mi carrito"));
         if(!this.index){
@@ -16,15 +17,18 @@ class Carrito{
         }
     }
 
+    // CONTENT CARRITO VISIBLE
     static visibleContCarrito(){
         this.contCarrito = document.getElementById("carrito-container-product");
-        this.contCarrito.style.display = "block";
+        this.contCarrito.style.right = "0%";
     }
 
+    // CONTENT CARRITO HIDDEN
     static hiddenContCarrito(){
-        this.contCarrito.style.display = "none";
+        this.contCarrito.style.right = "-100%";
     }
 
+    // SEARCH AND ADD ID THE LOCALSTORAGE
     static addIdCarritoDB(product){
         let arrayID = localStorage.getItem("mi carrito");
         if(!arrayID){
@@ -41,6 +45,7 @@ class Carrito{
         Carrito.serchProduct();
     }
 
+    // ADD PRODUCT
     static addContentCarrito(json){
         let contCarrito = document.querySelector("#carrito-container-product > div > #cont-producto");
         contCarrito.innerHTML += `
@@ -60,37 +65,43 @@ class Carrito{
                                         <span>Eliminar del carrito</span>
                                     </div>
                                 </article>`;
-        Carrito.addPrice(json["price"]);
+        Carrito.sumarPrice(json["price"]);
     }
 
-    static addPrice(price){
+    // SUMAR EL PRECIO
+    static sumarPrice(price){
         let contPrice = document.querySelector("#carrito-container-product > div > #inf-price > span > strong");
         let totalPrice = localStorage.getItem("total price");
         if(!totalPrice){
             localStorage.setItem("total price", price);
             contPrice.innerHTML = `$${price}`;
         }else{
-            let total = `${parseFloat(totalPrice) + parseFloat(price)}`.slice(0, 5);
+            let total = `${parseFloat(totalPrice) + parseFloat(price)}`.match(/([0-9]*(.[0-9]([0-9])?)?)/i)[0];
             contPrice.innerHTML = `$${total}`;
             localStorage.setItem("total price", `${total}`);
         }
     }
 
+    // RESTAR EL PRECIO
     static restPrice(price){
         let contPrice = document.querySelector("#carrito-container-product > div > #inf-price > span > strong");
         let totalPrice = localStorage.getItem("total price");
         if(totalPrice){
-            let total = `${parseFloat(totalPrice) - parseFloat(price)}`.slice(0, 5);
-            if(Object.is(total, NaN)){
+            let total = `${parseFloat(totalPrice) - parseFloat(price)}`.match(/([0-9]*(.[0-9]([0-9])?)?)/i);
+            if(Object.is(total[0], NaN) || total[0].match(/(-)/i)){
                 contPrice.innerHTML = `$0`;
                 localStorage.setItem("total price", "0");
+                localStorage.setItem("mi carrito", "[]");
+                this.index = 0;
             }else{
-                contPrice.innerHTML = `$${total}`;
-                localStorage.setItem("total price", total);
+                contPrice.innerHTML = `$${total[0]}`;
+                localStorage.setItem("total price", total[0]);
             }
         }
     }
 
+
+    // DELETE PRODUCT
     static deleteContentCarrito(){
         
         let contCarrito = document.querySelectorAll("#carrito-container-product > div > #cont-producto .product .btn-close");
@@ -114,12 +125,14 @@ class Carrito{
         });
     }
 
+    // MESSAGE
     static addMessage(){
         let contMessage = document.querySelector("#carrito-container-product > div > #inf-price > #container-message");
-        contMessage.innerHTML = "Has eliminado un producto";
+        contMessage.innerHTML += `<span id="m${indexMsg++}">Has eliminado un producto</span>`;
         setTimeout(()=>{
-            contMessage.innerHTML = "";
-        }, 1500);
+            let span = document.querySelector(`#carrito-container-product > div > #inf-price > #container-message #m${--indexMsg}`);
+            span.remove();
+        }, 2000);
     }
 };
 
@@ -127,20 +140,7 @@ class Carrito{
 
 
 
-function efectDeleteHeader(){
-    let contProduct = document.querySelector("#carrito-container-product > div > #cont-producto");
-    let headerCarrito = document.querySelector("#carrito-container-product > div > header > h1");
-    contProduct.onscroll = ()=>{
-        if(contProduct.scrollTop > 50){
-            headerCarrito.style.height = "0px";
-            headerCarrito.style.paddingTop = "0px";
-        }else{
-            headerCarrito.style.paddingTop = "20px";
-            headerCarrito.style.height = "70px";
-        }
-    }
-}
-
+// FETCH SEARCH PRODUCT
 async function requestFetch(obj, index){
     if(obj){
         let response = await fetch("/products/search-product/", {
@@ -154,6 +154,7 @@ async function requestFetch(obj, index){
 }
 
 
+// BUTTON VISIBLE CONTENT CARRITO
 function visibleContCarrito(){
     let btn = document.getElementById("container-carrito");
     let body = document.querySelector("body");
@@ -171,7 +172,7 @@ function visibleContCarrito(){
 
 
 
-
+// CALCULATE PRICE TOTAL
 (function(){
     localStorage.setItem("total price", "");
     let btn = document.getElementById("container-carrito");
@@ -181,7 +182,21 @@ function visibleContCarrito(){
     btnClose.onclick = visibleContCarrito;
 
     Carrito.serchProduct();
-
-    efectDeleteHeader();
+    pay();
 })();
 
+
+
+// BUTTON PAY
+function pay(){
+    let btnPay = document.querySelector("#carrito-container-product > div > #cont-btn-pay");
+    btnPay.onclick = ()=>{
+        let products = document.querySelectorAll("#carrito-container-product > div > #cont-producto .product");
+        
+        localStorage.setItem("num products", products.length);
+        localStorage.setItem("total price", "0");
+        localStorage.setItem("mi carrito", "[]");
+
+        location.href = "http://localhost:3000/inf-pay";
+    }
+}

@@ -88,9 +88,12 @@ function informationAcoout(){
 
 function addMessageMenu(name){
     let contMessage = document.querySelector("#cont-menu > #container-message");
-    contMessage.innerHTML = `Has agregado un producto a tu carrito`;
-    setTimeout(()=>{
-        contMessage.innerHTML = "";
-    }, 1000);
+    return new Promise((res, rej)=>{
+        contMessage.innerHTML = `Has agregado un producto a tu carrito`;
+        setTimeout(()=>{
+            contMessage.innerHTML = "";
+            res();
+        }, 2000);
+    })
 }
 window.onload = initMenu();
