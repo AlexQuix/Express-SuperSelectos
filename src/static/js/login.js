@@ -136,20 +136,25 @@ function sendFormSingIn(){
         // COMPROBAR LA INFORMACION
         let response = await fetch("/login/signin/cheek-data", {
             method: "POST",
-            body: `user=${user.value}&password=${password.value}`
+            headers: {"Content-Type": "application/json"},
+            body: `{"user":"${user.value}", "password": "${password.value}"}`
         });
         let json = await response.json();
         try{
-            if(json !== undefined){
+            if(json.message !== "err"){
                 for(let prop in json){
-                    localStorage.setItem(prop, json[prop]);
+                    if(prop !== "message"){
+                        localStorage.setItem(prop, json[prop]);
+                    }
                 }
                 form.submit();
+            }else{
+                throw "La contraseña o el usuario son incorrectos";
             }
             location.href = "/";
         }
         catch (e){
-            contAlert(false, user, "signin", text);
+            contAlert((json.message !== "err"), user, "signin", e);
         }
     }
 }

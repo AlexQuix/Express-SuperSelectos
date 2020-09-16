@@ -9,6 +9,7 @@ function initMenu(){
 }
 
 
+// ACTIVE OR DESACTIVE THE OPTION THE NAVIGATION
 function visibleOptMenuBtn(){
     let body = document.querySelector("body");
     let contOptMenu = document.querySelector("#container-opt-menu");
@@ -28,6 +29,8 @@ function visibleOptMenuBtn(){
     }
 }
 
+
+// ADD KEY WORD THE CONTENT
 function addContKeyWord(json){
     let contKeyWord = document.querySelector("#cont-menu > #buscar > #search-result");
     contKeyWord.innerHTML += `
@@ -35,6 +38,7 @@ function addContKeyWord(json){
     `;
 }
 
+// SEARCH KEY WORD
 function serchKeyWord(){
     let input = document.querySelector("#cont-menu > #buscar > #buscar-search > input")
     input.oninput = async function(e){
@@ -58,19 +62,17 @@ function serchKeyWord(){
         }
     }
 }
-function visibleBox(){
+
+
+// URL FOR CREATE ACCOUNT
+function urlCreateAccount(){
     let btn = document.querySelector("#cont-menu > #user");
     btn.onclick = (e)=>{
-        let box = document.querySelector("#cont-menu > #user > #opt-user");
-        if(box.dataset.visible == "false"){
-            box.style.overflow = "visible";
-            box.dataset.visible = "true";
-        }else{
-            box.style.overflow = "hidden";
-            box.dataset.visible = "false";
-        }
+        location.href = "http://localhost:3000/login/signup"
     }
 }
+
+// DETERMINE IF EXIST ONE ACCOUNT
 function informationAcoout(){
     let btn = document.querySelector("#cont-menu > #user");
     if(localStorage.getItem("user")){
@@ -78,14 +80,15 @@ function informationAcoout(){
             if(localStorage.getItem("user")){
                 location.replace("http://localhost:3000/login/informacioncuenta");
             }else{
-                visibleBox();
+                urlCreateAccount();
             }
         }
     }else{
-        visibleBox();
+        urlCreateAccount();
     }
 }
 
+// MESSAGE ADD PRODUCT
 let totalMsgAddProduct = 0;
 function addMessageMenu(name){
     let contIndex = document.querySelector("#cont-menu > #container-message > #contador-index");

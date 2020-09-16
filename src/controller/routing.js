@@ -53,9 +53,9 @@ appLoginPost.post("/login/signup/cheek-user", async function(req, res){
     }
 });
 appLoginPost.post("/login/signin/cheek-data", async function(req, res){
-    let query = req.body;
-    let cursor = await CRUD.read("user", query);
     res.setHeader("Content-Type", "application/json");
+    let cursor = await CRUD.read("user", {$and: [{user: req.body.user}, {password: req.body.password}]});
+    (!cursor)? cursor = {message: "err"}: cursor.message = "ok";
     res.send(cursor);
 })
 
