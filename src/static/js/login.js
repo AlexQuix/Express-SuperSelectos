@@ -16,90 +16,51 @@ function initLogin(){
         break;
     }
     viewPassword();
+    btnsNavLogin();
 };
-function sendFormSingUp(){
-    let form = document.querySelector("#container-login > #cont-signup > div > form");
-    let btn = document.querySelector("#container-login > #cont-signup > div > form > #btns button");
-    btn.onclick = async function(e){
-        e.preventDefault();
-        if(e.target.validity.valid){
-            let formdata = new FormData(form);
-            let response = await fetch("http://localhost:3000/login/signup/create-user", {    
-                method: "POST",
-                body: formdata
-            });
-            let text = await response.text();
-            if(text !== "err"){
-                let json = JSON.parse(text);
-                if(json !== undefined){
-                    for(let prop in json){
-                        localStorage.setItem(prop, json[prop]);
-                    }
-                    location.href = "http://localhost:3000/";
-                }
+
+
+
+// BUTTONS LOGIN OPTIONS
+function btnsNavLogin(){
+    let contLogin = document.getElementById("container-login");
+    
+    function addStyleListNav(color){
+        let button = document.querySelector(`#container-login > #container-nav-login > #list-nav > li > #${contLogin.dataset.login}`);
+        button.style.color = color;
+
+        let contListNav = document.querySelector("#container-login > #container-nav-login > #list-nav");
+        let background = window.getComputedStyle(button).backgroundColor;
+        contListNav.style.borderBottomColor = background;
+    }
+    function dectectClick(){
+        let buttonArray = document.querySelectorAll("#container-login > #container-nav-login > #list-nav li button");
+        for(let button of buttonArray){
+            button.onclick = (e)=>{
+                addStyleListNav("rgba(250, 250, 250, 0.7)");
+
+                let contOptLogin = document.querySelector(`#container-login > #cont-${contLogin.dataset.login}`);
+                contOptLogin.style.display = "none";
+                contLogin.dataset.login = `${e.target.id}`;
+                initLogin();
             }
+        };
+    }
+    function backHome(){
+        let contHome = document.querySelector("#container-login > #container-nav-login > #cont-btn-home");
+        contHome.onclick = ()=>{
+            location.href = "/";
         }
     }
+    dectectClick();
+    addStyleListNav("#fff");
+    backHome();
 }
-function viewInformationAccount(){
-    let contInf = document.querySelector("#container-login > #cont-informacioncuenta > #container-inf > #inf");
-    contInf.innerHTML = `
-            <label><strong>Usuario :</strong><p>${localStorage.getItem("user")}</p></label>
-            <label><strong>Contraseña :</strong><p>${localStorage.getItem("password")}</p></label>
-            <label><strong>Correo :</strong><p>${localStorage.getItem("email")}</p></label>
-            <label><strong>Pais :</strong><p>${localStorage.getItem("country")}</p></label>
-            <label><strong>Direccion :</strong><p>${localStorage.getItem("direction")}</p></label>
-            <label><strong>Dinero :</strong><p>$${localStorage.getItem("money")}</p></label>
-        `;
-}
-function sendFormSingIn(){
-    let btnSendForm = document.querySelector(`#container-login > #cont-signin > div > form > #btns button`);
-    btnSendForm.onclick = async function(e){
-        e.preventDefault();
-        let form = document.querySelector("#container-login > #cont-signin > div > form");
-        let user = document.querySelector("#container-login > #cont-signin > div > form #user");
-        let password = document.querySelector("#container-login > #cont-signin > div > form #password");
-        // COMPROBAR LA INFORMACION
-        let response = await fetch("/login/signin/cheek-data", {
-            method: "POST",
-            body: `user=${user.value}&password=${password.value}`
-        });
-        let text = await response.text();
-        try{
-            let json = JSON.parse(text);
-            if(json !== undefined){
-                for(let prop in json){
-                    localStorage.setItem(prop, json[prop]);
-                }
-                form.submit();
-            }
-        }
-        catch (e){
-            contAlert(false, user, "signin", text);
-        }
-    }
-}
-function cheekUserSignUp(){
-    let input_user = document.querySelector("#cont-signup > div > form > #inputs #input-user");
-    input_user.oninput = async function(element){
-        let response = await fetch("/login/signup/cheek-user", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: `{"user": "${element.target.value}"}`
-        });
-        let text = await response.text();
-        contAlert((text === "ok"), input_user, "signup", text);
-    }
-};
-function cheekPasswordSignUp(){
-    let password1 = document.querySelector("#cont-signup > div > form > #inputs #input-password1");
-    let password2 = document.querySelector("#cont-signup > div > form > #inputs #input-password2");
-    password2.oninput = (e)=>{
-        let mensaje = "Las contraseñas ingresadas no coinciden entre si";
-        contAlert(password1.value === password2.value, password1, "signup", mensaje);
-        contAlert(password1.value === password2.value, password2, "signup", mensaje);
-    }
-};
+
+
+
+
+// ALERTAS
 function contAlert(condicional, input, login, mensaje){
     let color = ["rgb(248, 248, 248)", "rgb(221, 20, 87)"];
     let cont_alert = document.querySelector(`#container-login > #cont-${login} > div > form > #cont-alert`);
@@ -117,6 +78,9 @@ function contAlert(condicional, input, login, mensaje){
         }, 5000);
     }
 };
+
+
+// LOOK PASSWORD
 function viewPassword(){
     let cont_view_password = document.querySelectorAll(".view-password");
     for(let btn_view of cont_view_password){
@@ -127,7 +91,7 @@ function viewPassword(){
             if(dataset.view === "true"){
                 input.type = "text";
                 dataset.view = "false";
-                div.innerHTML = `<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="eye-slash" class="svg-inline--fa fa-eye-slash fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M320 400c-75.85 0-137.25-58.71-142.9-133.11L72.2 185.82c-13.79 17.3-26.48 35.59-36.72 55.59a32.35 32.35 0 0 0 0 29.19C89.71 376.41 197.07 448 320 448c26.91 0 52.87-4 77.89-10.46L346 397.39a144.13 144.13 0 0 1-26 2.61zm313.82 58.1l-110.55-85.44a331.25 331.25 0 0 0 81.25-102.07 32.35 32.35 0 0 0 0-29.19C550.29 135.59 442.93 64 320 64a308.15 308.15 0 0 0-147.32 37.7L45.46 3.37A16 16 0 0 0 23 6.18L3.37 31.45A16 16 0 0 0 6.18 53.9l588.36 454.73a16 16 0 0 0 22.46-2.81l19.64-25.27a16 16 0 0 0-2.82-22.45zm-183.72-142l-39.3-30.38A94.75 94.75 0 0 0 416 256a94.76 94.76 0 0 0-121.31-92.21A47.65 47.65 0 0 1 304 192a46.64 46.64 0 0 1-1.54 10l-73.61-56.89A142.31 142.31 0 0 1 320 112a143.92 143.92 0 0 1 144 144c0 21.63-5.29 41.79-13.9 60.11z"></path></svg>`;
+                div.innerHTML = `<svg viewBox="0 0 491 235" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M81 0L29 21C29 31.4 48.3333 54.6667 58 65L0 152L52 185L112 92L157 109V235H218V122C234 128.4 270 124.667 286 122V235H346V114L390 99L439 185L491 152L439 65C463.8 38.6 469.333 24.6667 469 21L416 0C327 106 107 55 81 0Z"/></svg>`;
             }else{
                 input.type = "password";
                 dataset.view = "true";
@@ -136,5 +100,109 @@ function viewPassword(){
         }
     }
 };
+
+
+// INFORMATION CUENTA
+function viewInformationAccount(){
+    let contInf = document.querySelector("#container-login > #cont-informacioncuenta > #container-inf > #inf");
+    contInf.innerHTML = `
+            <label><strong>Usuario :</strong><p>${localStorage.getItem("user")}</p></label>
+            <label><strong>Contraseña :</strong><p>${localStorage.getItem("password")}</p></label>
+            <label><strong>Correo :</strong><p>${localStorage.getItem("email")}</p></label>
+            <label><strong>Pais :</strong><p>${localStorage.getItem("country")}</p></label>
+            <label><strong>Direccion :</strong><p>${localStorage.getItem("direction")}</p></label>
+            <label><strong>Dinero :</strong><p>$${localStorage.getItem("money")}</p></label>
+    `;
+
+    let listNavLogin = document.querySelector("#container-login > #container-nav-login > #list-nav");
+    let addElement = listNavLogin.dataset.addelement;
+    if(addElement === "true"){
+        let li = document.createElement("li");
+        li.innerHTML = `<button id="informacioncuenta">Mi cuenta</button>`;
+        listNavLogin.appendChild(li);
+        listNavLogin.dataset.addelement = "false"
+    }
+}
+
+
+// SIGN IN
+function sendFormSingIn(){
+    let btnSendForm = document.querySelector(`#container-login > #cont-signin > div > form > #btns button`);
+    btnSendForm.onclick = async function(e){
+        e.preventDefault();
+        let form = document.querySelector("#container-login > #cont-signin > div > form");
+        let user = document.querySelector("#container-login > #cont-signin > div > form #user");
+        let password = document.querySelector("#container-login > #cont-signin > div > form #password");
+        // COMPROBAR LA INFORMACION
+        let response = await fetch("/login/signin/cheek-data", {
+            method: "POST",
+            body: `user=${user.value}&password=${password.value}`
+        });
+        let json = await response.json();
+        try{
+            if(json !== undefined){
+                for(let prop in json){
+                    localStorage.setItem(prop, json[prop]);
+                }
+                form.submit();
+            }
+            location.href = "/";
+        }
+        catch (e){
+            contAlert(false, user, "signin", text);
+        }
+    }
+}
+
+
+// SIGN UP
+function cheekUserSignUp(){
+    let inputUser = document.querySelector("#cont-signup > div > form > #cont-inputs #input-user");
+    inputUser.oninput = async function(element){
+        let response = await fetch("/login/signup/cheek-user", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: `{"user": "${element.target.value}"}`
+        });
+        let text = await response.text();
+        contAlert((text === "ok"), inputUser, "signup", text);
+    }
+};
+function cheekPasswordSignUp(){
+    let password1 = document.querySelector("#cont-signup > div > form > #cont-inputs #input-password1");
+    let password2 = document.querySelector("#cont-signup > div > form > #cont-inputs #input-password2");
+    password2.oninput = (e)=>{
+        let mensaje = "Las contraseñas ingresadas no coinciden entre si";
+        contAlert(password1.value === password2.value, password1, "signup", mensaje);
+        contAlert(password1.value === password2.value, password2, "signup", mensaje);
+    }
+};
+function sendFormSingUp(){
+    let form = document.querySelector("#container-login > #cont-signup > div > form");
+    let btn = document.querySelector("#container-login > #cont-signup > div > form > #btns button");
+    btn.onclick = async function(e){
+        
+        if(form.checkValidity()){
+            let formdata = new FormData(form);
+            let response = await fetch("http://localhost:3000/login/signup/create-user", {    
+                method: "POST",
+                body: formdata
+            });
+            let text = await response.text();
+            if(text !== "err"){
+                let json = JSON.parse(text);
+                if(json !== undefined){
+                    for(let prop in json){
+                        localStorage.setItem(prop, json[prop]);
+                    }
+                    location.href = "http://localhost:3000/";
+                }
+            }
+        }
+
+        e.preventDefault();
+        
+    }
+}
 
 window.addEventListener("DOMContentLoaded",initLogin)

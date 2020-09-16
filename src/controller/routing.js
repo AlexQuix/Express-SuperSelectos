@@ -52,6 +52,12 @@ appLoginPost.post("/login/signup/cheek-user", async function(req, res){
         res.send("Este nombre ya esta en uso");
     }
 });
+appLoginPost.post("/login/signin/cheek-data", async function(req, res){
+    let query = req.body;
+    let cursor = await CRUD.read("user", query);
+    res.setHeader("Content-Type", "application/json");
+    res.send(cursor);
+})
 
 
 
