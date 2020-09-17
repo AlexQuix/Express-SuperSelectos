@@ -1,0 +1,226 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+
+
+/* CONTAINER MAIN */
+#container-payment{
+    width: 100%;
+    min-height: 100vh;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+/* CONTAINER HEADERS */
+#container-payment > #cont-headers{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+/* CONTAINER HEADERS LOGO */
+#container-payment > #cont-headers > #cont-logo{
+    width: 250px;
+    height: 160px;
+    display: grid;
+    place-items: center;
+}
+#container-payment > #cont-headers > #cont-logo > svg{
+    width: 100%;
+    height: 100%;
+}
+/* CONTAINER HEADERS H1 */
+#container-payment > #cont-headers > header > h1{
+    font-size: 2.5em;
+    font-family: "Lobster";
+    color: #856161;
+}
+
+
+/* CONTAINER LIST CARD */
+#container-payment > #cont-list-card{
+    padding: 20px 60px;
+    margin-top: 60px;
+    background: #f0f0f0;
+    display: none;
+    flex-direction: column;
+    border-radius: 20px;
+}
+#container-payment > #cont-list-card > header > h1{
+    width: 100%;
+    padding: 10px 0px;
+    font-size: 1.3em;
+    font-family: "Sriracha";
+    text-align: center;
+    color: rgb(138, 138, 138);
+}
+#container-payment > #cont-list-card > #list-card{
+    width: 100%;
+    margin: 20px 0px;
+    display: flex;
+    flex-direction: row;
+}
+#container-payment > #cont-list-card > #list-card li{
+    cursor: pointer;
+    width: 100px;
+    height: 70px;
+    margin: 0px 15px;
+    list-style: none;
+    z-index: 100;
+}
+#container-payment > #cont-list-card > #list-card li > svg{
+    width: 100%;
+    height: 100%;
+    fill: rgb(82, 82, 82);
+    transition: 0.7s;
+}
+#container-payment > #cont-list-card > #list-card > #cuscatlan{
+    width: 88px;
+    height: 70px;
+}
+
+
+#container-payment > #cont-list-card > #list-card > #cuscatlan:hover > svg{
+    fill: #c7ab1e;
+    transform: scale(1.15);
+}
+#container-payment > #cont-list-card > #list-card > #paypal:hover > svg{
+    fill: #1ca9a2;
+    transform: scale(1.15);
+}
+#container-payment > #cont-list-card > #list-card > #visa:hover > svg{
+    fill: #096377;
+    transform: scale(1.15);
+}
+#container-payment > #cont-list-card > #list-card > #mastercard:hover > svg{
+    fill: #D90D4A;
+    transform: scale(1.15);
+}
+
+
+
+
+
+/* CONTAINER PURCHASE PRODUTC */
+#container-payment > #container-inf-purchase{
+    width: 600px;
+    padding: 30px 60px;
+    margin: 60px 0px;
+    background: #f0f0f0;
+    display: none;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 20px;
+}
+/* HEADER */
+#container-payment > #container-inf-purchase > header > h1{
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    font-family: "Sriracha";
+    text-align: center;
+    color: rgb(157, 157, 157);
+}
+/* USED CARD */
+#container-payment > #container-inf-purchase > #used-card{
+    width: 200px;
+    height: 100px;
+}
+#container-payment > #container-inf-purchase > #used-card > svg{
+    width: 100%;
+    height: 100%;
+}
+/* CONTAINER PURCHASE PRODUCTS */
+#container-payment > #container-inf-purchase > #cont-purchase-products{
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
+}
+#container-payment > #container-inf-purchase > #cont-purchase-products > header > h1{
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 1.3em;
+    font-family: "Sriracha";
+    text-align: left;
+    color: rgb(84, 84, 84);
+}
+#container-payment > #container-inf-purchase > #cont-purchase-products > #total-price{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border-top: 2px solid #000;
+}
+#container-payment > #container-inf-purchase > #cont-purchase-products > #cont-list-product > span{
+    width: 100%;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: row;
+}
+#container-payment > #container-inf-purchase > #cont-purchase-products > #total-price > strong,
+#container-payment > #container-inf-purchase > #cont-purchase-products > #cont-list-product > span > strong{
+    font-size: 1.2em;
+    font-family: "Sriracha";
+    color: rgb(116, 114, 114);
+}
+#container-payment > #container-inf-purchase > #cont-purchase-products > #total-price > p,
+#container-payment > #container-inf-purchase > #cont-purchase-products > #cont-list-product > span > p{
+    font-size: 1.2em;
+    font-family: "Sriracha";
+    color: #000;
+    position: absolute;
+    right: 0px;
+}
+/* CONTAINER PURCHASE PRODUCTS THE CONT BTNS */
+#container-payment > #container-inf-purchase > #cont-btns{
+    width: 100%;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#container-payment > #container-inf-purchase > #cont-btns a{
+    cursor: pointer;
+    display: inline-block;
+    width: 60%;
+    padding: 10px 40px;
+    font-size: 1em;
+    font-family: "Sriracha";
+    text-decoration: none;
+    color: #fff;
+    background: #0fbb70;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    transition: 0.5s;
+}
+#container-payment > #container-inf-purchase > #cont-btns a > svg{
+    width: 30px;
+    height: 30px;
+}
+#container-payment > #container-inf-purchase > #cont-btns a > span{
+    height: 100%;
+    margin-left: 8px;
+    display: grid;
+    place-content: center;
+}
+#container-payment > #container-inf-purchase > #cont-btns a:hover{
+    filter: brightness(0.7);
+}
+#container-payment > #container-inf-purchase > #cont-btns > p{
+    display: inline-block;
+    width: 60%;
+    margin-top: 20px;
+    font-size: 1em;
+    font-family: "Sriracha";
+    text-align: center;
+    color: rgb(20, 165, 97);
+}

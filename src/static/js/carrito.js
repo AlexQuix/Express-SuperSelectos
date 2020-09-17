@@ -191,12 +191,7 @@ function visibleContCarrito(){
 function pay(){
     let btnPay = document.querySelector("#carrito-container-product > div > #cont-btn-pay");
     btnPay.onclick = ()=>{
-        let products = document.querySelectorAll("#carrito-container-product > div > #cont-producto .product");
-        
-        localStorage.setItem("num products", products.length);
-        localStorage.setItem("total price", "0");
-        localStorage.setItem("mi carrito", "[]");
-
-        location.href = "http://localhost:3000/inf-pay";
+        localStorage.setItem("payment", "true");
+        location.href = "/payment";
     }
 }

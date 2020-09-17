@@ -24,8 +24,8 @@ appMain.get("/product/clasification/:clasification", (req, res)=>{
 appMain.get("/about", (req, res)=>{
     res.render("about.html")
 });
-appMain.get("/inf-pay", (req, res)=>{
-    res.sendFile("inf-pay.html", {root: "./src/views/"});
+appMain.get("/payment", (req, res)=>{
+    res.sendFile("payment.html", {root: "./src/views/"});
 })
 
 
